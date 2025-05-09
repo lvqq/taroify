@@ -12,6 +12,193 @@ Taroify 遵循 [Semver](https://semver.org/lang/zh-CN/) 语义化版本规范。
 
 ## 更新内容
 
+### v0.8.0
+
+`2025-04-20`
+
+**Feature**
+
+- Skeleton
+
+  - 重构 `Skeleton`，放弃旧版本 `Skeleton` 使用方式 [925](https://github.com/mallfoundry/taroify/pull/925) [@Pilotager](https://github.com/Pilotager)
+
+- Cell
+
+  - 添加 `titleStyle`、`titleClass`、`valueClass`、`briefClass` 属性 [930](https://github.com/mallfoundry/taroify/pull/930) [@Pilotager](https://github.com/Pilotager)
+
+**Other**
+
+- 文档更新 `MCP` 使用方式 [939](https://github.com/mallfoundry/taroify/pull/939) [@Pilotager](https://github.com/Pilotager)
+
+### v0.7.0
+
+`2025-04-06`
+
+**Feature**
+
+- Divider
+
+  - 添加 `type` 属性使分割线垂直展示 [909](https://github.com/mallfoundry/taroify/pull/909) [@Pilotager](https://github.com/Pilotager)
+
+- TextEllipsis
+
+  - 增加 `toggle` 方法 [915](https://github.com/mallfoundry/taroify/pull/915) [@Pilotager](https://github.com/Pilotager)
+
+- Toast
+
+  - 增加 `Toast.allowMultiple()` 方法 [921](https://github.com/mallfoundry/taroify/pull/921) [@Pilotager](https://github.com/Pilotager)
+
+- Dialog
+
+  - 实现多实例 [922](https://github.com/mallfoundry/taroify/pull/922) [@Pilotager](https://github.com/Pilotager)
+
+**Bug Fixes**
+
+- ActionBar
+
+  - 优化文字换行 [899](https://github.com/mallfoundry/taroify/pull/899) [@Pilotager](https://github.com/Pilotager)
+
+- Toast
+
+  - 微信小程序Toast或Dialog在特定的回调里报错 [917](https://github.com/mallfoundry/taroify/pull/917) [@Pilotager](https://github.com/Pilotager)
+
+**Other**
+
+- Biome 格式化 [904](https://github.com/mallfoundry/taroify/pull/904) [@Pilotager](https://github.com/Pilotager)
+
+### v0.6.4-alpha.0
+
+`2025-02-23`
+
+**Feature**
+
+- List
+
+  - 新增 `onScroll` 事件 [892](https://github.com/mallfoundry/taroify/pull/892) [@hbztd](https://github.com/hbztd)
+
+- Tabs
+
+  - 新增 `shrink` 属性 [892](https://github.com/mallfoundry/taroify/pull/892) [@hbztd](https://github.com/hbztd)
+
+- Field
+
+  - Input、Textarea 设置 `min-height` 值为 `inherit` [892](https://github.com/mallfoundry/taroify/pull/892) [@hbztd](https://github.com/hbztd)
+
+- Switch
+
+  - 开关组件按有赞美化 [894](https://github.com/mallfoundry/taroify/pull/894) [@wenqiyun](https://github.com/wenqiyun)
+
+**Bug Fixes**
+
+- SafeArea
+
+  - 替换成 getWindowInfo 方法 [885](https://github.com/mallfoundry/taroify/pull/885) [@Pilotager](https://github.com/Pilotager)
+
+- FixedView
+
+  - 修复设置 placheholder 后 render 过程中 children 会重建 [892](https://github.com/mallfoundry/taroify/pull/892) [@hbztd](https://github.com/hbztd)
+
+- Navbar
+
+  - 修复设置 placheholder 后 render 过程中 children 会重建 [892](https://github.com/mallfoundry/taroify/pull/892) [@hbztd](https://github.com/hbztd)
+
+- Dialog
+
+  - 消除节点新增删除带来的副作用 [896](https://github.com/mallfoundry/taroify/pull/896) [@wenqiyun](https://github.com/wenqiyun)
+
+### v0.6.3-alpha.0
+
+`2025-01-05`
+
+**Bug Fixes**
+
+- Picker
+
+  - 修复 `Picker` 中 `columns` 更新未更新选中值 [875](https://github.com/mallfoundry/taroify/pull/875) [@Pilotager](https://github.com/Pilotager)
+
+**Other**
+
+- 添加 Biome [872](https://github.com/mallfoundry/taroify/pull/872) [@ianzone](https://github.com/ianzone)
+- 文档新增新特性版本号 [870](https://github.com/mallfoundry/taroify/pull/870) [@CodeMak1r-zy](https://github.com/CodeMak1r-zy)
+
+### v0.6.2-alpha.0
+
+`2024-12-25`
+
+**Bug Fixes**
+
+- Toast
+
+  - 修复 `close` 方法不生效问题 [865](https://github.com/mallfoundry/taroify/pull/865) [@Pilotager](https://github.com/Pilotager)
+
+- Notify
+
+  - 修复 `close` 方法不生效问题 [865](https://github.com/mallfoundry/taroify/pull/865) [@Pilotager](https://github.com/Pilotager)
+
+**Other**
+
+- 添加属性新特性版本号 [867](https://github.com/mallfoundry/taroify/pull/867) [@Pilotager](https://github.com/Pilotager)
+
+### v0.6.1-alpha.0
+
+`2024-12-18`
+
+**Other**
+
+- lodash 支持 tree shaking [861](https://github.com/mallfoundry/taroify/pull/861) [@hbztd](https://github.com/hbztd)
+
+### v0.6.0-alpha.0
+
+`2024-12-08`
+
+**Feature**
+
+- Toast
+
+  - 支持直接函数调用 [852](https://github.com/mallfoundry/taroify/pull/852) [@hbztd](https://github.com/hbztd)
+
+- Notify
+
+  - 支持直接函数调用，添加 `color` `background` 属性 [852](https://github.com/mallfoundry/taroify/pull/852) [@hbztd](https://github.com/hbztd)
+
+- Dialog
+
+  - 支持直接函数调用，添加 `title` `message` `messageAlign` `theme` `confirm` `cancel` `onBeforeClose` 属性 [852](https://github.com/mallfoundry/taroify/pull/852) [@hbztd](https://github.com/hbztd)
+
+**Bug Fixes**
+
+- ActionSheet
+
+  - 为 `ActionSheet` 组件添加默认的安全区域 [840](https://github.com/mallfoundry/taroify/pull/840) [@sweet7788](https://github.com/sweet7788)
+
+- List
+
+  - `scrollParentRect` 判空 [843](https://github.com/mallfoundry/taroify/pull/843) [@Pilotager](https://github.com/Pilotager)
+
+- Pick
+
+  - 修复 picker 组件在快速上滑或者下滑时，执行惯性动画期间，再次滚动 picker-column 后出现的位置卡顿问题 [844](https://github.com/mallfoundry/taroify/pull/844) [@kunkuntang](https://github.com/kunkuntang)
+
+- Popup
+
+  - 修复手动关闭未触发 `onClose` 事件 [852](https://github.com/mallfoundry/taroify/pull/852) [@hbztd](https://github.com/hbztd)
+
+- TextArea
+
+  - 修复 `getStringLength` 在输入 emoji 时无法正确统计字符长度 [853](https://github.com/mallfoundry/taroify/pull/853) [@CodeMak1r-zy](https://github.com/CodeMak1r-zy)
+
+- Form
+
+  - 修复 `validateFirst` [857](https://github.com/mallfoundry/taroify/pull/857) [@linxianxi](https://github.com/linxianxi)
+
+**Other**
+
+- 完善 DateTimePicker 文档 [834](https://github.com/mallfoundry/taroify/pull/834) [@sweet7788](https://github.com/sweet7788)
+- 完善 FormItem 文档 [837](https://github.com/mallfoundry/taroify/pull/837) [@Niubility-SunLight](https://github.com/Niubility-SunLight)
+- 完善 Form 文档 [847](https://github.com/mallfoundry/taroify/pull/847) [@lvqq](https://github.com/lvqq)
+- 完善 Calendar 文档 [850](https://github.com/mallfoundry/taroify/pull/853) [@CodeMak1r-zy](https://github.com/CodeMak1r-zy)
+- lodash 支持 tree shaking [851](https://github.com/mallfoundry/taroify/pull/851) [@hbztd](https://github.com/hbztd)
+
 ### v0.5.1-alpha.0
 
 `2024-10-28`
@@ -206,8 +393,6 @@ Taroify 遵循 [Semver](https://semver.org/lang/zh-CN/) 语义化版本规范。
 - 修复 `taro` 预编译 `@taroify/core` `@taroify/icons` 失败 [763](https://github.com/mallfoundry/taroify/pull/763) [@hbztd](https://github.com/hbztd)
 
 - package.json 添加 `repository` 和 `bugs` [764](https://github.com/mallfoundry/taroify/pull/764) [@Pilotager](https://github.com/Pilotager)
-
-**Feature**
 
 ### v0.3.0-alpha.0
 
@@ -670,7 +855,7 @@ Taroify 遵循 [Semver](https://semver.org/lang/zh-CN/) 语义化版本规范。
 - Picker
 
   - 添加 `optionHeight` 属性，支持配置选项高度 [629](https://github.com/mallfoundry/taroify/pull/629) [@hbztd](https://github.com/hbztd)
-  - 添加 `title` `confirmText` `cancelText` `columns` `columnsFIle`，支持通过数据配置选项 [629](https://github.com/mallfoundry/taroify/pull/629) [@hbztd](https://github.com/hbztd)
+  - 添加 `title` `confirmText` `cancelText` `columns` `columnsFieldNames`，支持通过数据配置选项 [629](https://github.com/mallfoundry/taroify/pull/629) [@hbztd](https://github.com/hbztd)
 
 - Cell
 

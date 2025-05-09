@@ -1,7 +1,7 @@
 import * as React from "react"
 import { useMemo, useRef, useState, useEffect } from "react"
 import { Canvas, View } from "@tarojs/components"
-import { getEnv, getSystemInfoSync } from "@tarojs/taro"
+import { getEnv, getWindowInfo } from "@tarojs/taro"
 import cls from "classnames"
 import { useCanvas } from "../hooks"
 import { prefixClassname } from "../styles"
@@ -44,6 +44,8 @@ function Watermark(props: WatermarkProps) {
   const canvasRef = useRef<HTMLDivElement>(null)
   const [watermarkUrl, setWatermarkUrl] = useState("")
   const [canvas, ctx, loaded] = useCanvas(canvasId, canvasRef)
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     // not supported in mini program
     // const svgStr =
@@ -78,7 +80,7 @@ function Watermark(props: WatermarkProps) {
         }
         image.src = imageProp
       } else {
-        const ratio = getSystemInfoSync().pixelRatio || 1
+        const ratio = getWindowInfo().pixelRatio || 1
         canvas.width = width * ratio
         canvas.height = height * ratio
         ctx.scale(ratio, ratio)
@@ -94,14 +96,14 @@ function Watermark(props: WatermarkProps) {
         setWatermarkUrl(canvas.toDataURL())
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gapX, gapY, imageProp, width, height, rotate, opacity, content, textSize, textColor, loaded])
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   const style = useMemo(
     () => ({
       zIndex,
       backgroundImage: `url(${watermarkUrl})`,
       backgroundSize: `${width}px ${height}px`,
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }),
     [zIndex, watermarkUrl],
   )

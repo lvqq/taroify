@@ -1,6 +1,14 @@
 import * as React from "react"
-import { CSSProperties, FC, ReactNode, useMemo, useRef, useState, useEffect } from "react"
-import { getSystemInfoSync, nextTick } from "@tarojs/taro"
+import {
+  type CSSProperties,
+  type FC,
+  type ReactNode,
+  useMemo,
+  useRef,
+  useState,
+  useEffect,
+} from "react"
+import { getWindowInfo, nextTick } from "@tarojs/taro"
 import { View } from "@tarojs/components"
 import type { ITouchEvent } from "@tarojs/components/types/common"
 import { cloneIconElement, isIconElement } from "@taroify/icons/utils"
@@ -11,7 +19,7 @@ import { preventDefault } from "../utils/dom/event"
 import { useTouch } from "../utils/touch"
 import { closest } from "../utils/closest"
 import { prefixClassname } from "../styles"
-import {
+import type {
   FloatingBubbleAxis,
   FloatingBubbleMagnetic,
   FloatingBubbleOffset,
@@ -52,8 +60,8 @@ const FloatingBubble: FC<FloatingBubbleProps> = (props) => {
   const prevX = useRef(0)
   const prevY = useRef(0)
 
-  const windowHeight = useMemo(() => getSystemInfoSync().windowHeight, [])
-  const windowWidth = useMemo(() => getSystemInfoSync().windowWidth, [])
+  const windowHeight = useMemo(() => getWindowInfo().windowHeight, [])
+  const windowWidth = useMemo(() => getWindowInfo().windowWidth, [])
 
   const boundary = useMemo<FloatingBubbleBoundary>(() => {
     return {
@@ -170,14 +178,15 @@ const FloatingBubble: FC<FloatingBubbleProps> = (props) => {
     else preventDefault(event, true)
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     updateState()
     nextTick(() => {
       initialized.current = true
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     updateState()
   }, [windowWidth, windowHeight, gap, offset.y, offset.x])

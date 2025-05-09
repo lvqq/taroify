@@ -1,8 +1,8 @@
 import * as React from "react"
-import { forwardRef, CSSProperties, useMemo, useState, useRef, useEffect } from "react"
-import { getSystemInfoSync, getEnv } from "@tarojs/taro"
+import { forwardRef, type CSSProperties, useMemo, useState, useRef, useEffect, useImperativeHandle } from "react"
+import { getWindowInfo, getEnv } from "@tarojs/taro"
 import { View, ScrollView } from "@tarojs/components"
-import { ViewProps } from "@tarojs/components/types/View"
+import type { ViewProps } from "@tarojs/components/types/View"
 import classNames from "classnames"
 import SafeArea from "../safe-area"
 import { prefixClassname } from "../styles"
@@ -23,7 +23,11 @@ export interface FloatingPanelProps extends ViewProps {
   handleChange?: (height: number) => void
 }
 
-const FloatingPanel = forwardRef<any, FloatingPanelProps>((props, ref) => {
+export interface FloatingPanelInstance {
+  setHeight: (height: number) => void
+}
+
+const FloatingPanel = forwardRef<FloatingPanelInstance, FloatingPanelProps>((props, ref) => {
   const {
     className,
     style: styleProp,
@@ -44,7 +48,9 @@ const FloatingPanel = forwardRef<any, FloatingPanelProps>((props, ref) => {
   const [scrollContentTop, setScrollContentTop] = useState(0)
   const touch = useTouch()
 
-  const windowHeight = useMemo(() => getSystemInfoSync().windowHeight, [])
+  const windowHeight = useMemo(() => getWindowInfo().windowHeight, [])
+
+  useImperativeHandle(ref, () => ({ setHeight }))
 
   const ease = (moveY: number): number => {
     const absDistance = Math.abs(moveY)
@@ -74,6 +80,7 @@ const FloatingPanel = forwardRef<any, FloatingPanelProps>((props, ref) => {
     [anchorsProp, boundary.min, boundary.max],
   )
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     setHeight(closest(anchors, height))
   }, [boundary.max, boundary.min])

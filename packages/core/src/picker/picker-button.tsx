@@ -1,7 +1,7 @@
-import { ITouchEvent, View } from "@tarojs/components"
+import { type ITouchEvent, View } from "@tarojs/components"
 import classNames from "classnames"
 import * as React from "react"
-import { ReactNode, useContext } from "react"
+import { type ReactNode, useContext } from "react"
 import { prefixClassname } from "../styles"
 import PickerContext from "./picker.context"
 

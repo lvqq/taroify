@@ -1,5 +1,5 @@
-import { useEffect, useState, useMemo, RefObject } from "react"
-import { getEnv, nextTick, createSelectorQuery, getSystemInfoSync } from "@tarojs/taro"
+import { useEffect, useState, useMemo, type RefObject } from "react"
+import { getEnv, nextTick, createSelectorQuery, getWindowInfo } from "@tarojs/taro"
 import { getRect } from "../utils/dom/rect"
 import useMemoizedFn from "./use-memoized-fn"
 
@@ -11,11 +11,13 @@ function useCanvas(canvasId: string, canvasRef: RefObject<any>, options: UseCanv
   const [loaded, setLoaded] = useState(false)
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null)
   const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null)
-  const ratio = useMemo(() => getSystemInfoSync().pixelRatio || 1, [])
+  const ratio = useMemo(() => getWindowInfo().pixelRatio || 1, [])
   const { onLoaded: onLoadedProp } = options
   const onLoaded = useMemoizedFn((a: HTMLCanvasElement, b: CanvasRenderingContext2D) =>
     onLoadedProp?.(a, b),
   )
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     const env = getEnv()
     let retry = 0
@@ -33,16 +35,17 @@ function useCanvas(canvasId: string, canvasRef: RefObject<any>, options: UseCanv
         setLoaded(true)
         onLoaded(_canvas!, _ctx)
       } else {
-        setTimeout(() => {
-          if (retry++ < 5) {
-            init()
-            // eslint-disable-next-line
-            console.log("[Taroify] canvas: init again")
-          } else {
-            // eslint-disable-next-line
-            console.error("[Taroify] canvas: init fail")
-          }
-        }, 100 * 2 ** retry)
+        setTimeout(
+          () => {
+            if (retry++ < 5) {
+              init()
+              console.log("[Taroify] canvas: init again")
+            } else {
+              console.error("[Taroify] canvas: init fail")
+            }
+          },
+          100 * 2 ** retry,
+        )
       }
     }
 
@@ -62,7 +65,6 @@ function useCanvas(canvasId: string, canvasRef: RefObject<any>, options: UseCanv
     }
 
     init()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canvasId, canvasRef])
   return [canvas, ctx, loaded] as const
 }

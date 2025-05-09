@@ -1,9 +1,9 @@
-import { getSystemInfoSync } from "@tarojs/taro"
+import { getWindowInfo } from "@tarojs/taro"
 import { View } from "@tarojs/components"
-import { ViewProps } from "@tarojs/components/types/View"
+import type { ViewProps } from "@tarojs/components/types/View"
 import classNames from "classnames"
 import * as React from "react"
-import { useMemo, CSSProperties } from "react"
+import { useMemo, type CSSProperties } from "react"
 import { prefixClassname } from "../styles"
 
 export type SafeAreaPosition = "top" | "bottom"
@@ -17,7 +17,7 @@ export interface SafeAreaProps extends ViewProps {
 function SafeArea(props: SafeAreaProps) {
   const { className, position, nativeSafeTop, style, ...restProps } = props
 
-  const { statusBarHeight } = getSystemInfoSync()
+  const { statusBarHeight } = getWindowInfo()
 
   const customStyle = useMemo(() => {
     if (position === "top" && nativeSafeTop) {
@@ -26,7 +26,7 @@ function SafeArea(props: SafeAreaProps) {
       }
     }
     return {}
-  }, [position])
+  }, [position, nativeSafeTop, statusBarHeight])
 
   return (
     <View

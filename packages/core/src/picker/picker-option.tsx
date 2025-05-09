@@ -1,8 +1,8 @@
 import { View } from "@tarojs/components"
-import { ViewProps } from "@tarojs/components/types/View"
+import type { ViewProps } from "@tarojs/components/types/View"
 import classNames from "classnames"
 import * as React from "react"
-import { CSSProperties, isValidElement, ReactNode, useMemo, useContext } from "react"
+import { type CSSProperties, isValidElement, type ReactNode, useMemo, useContext } from "react"
 import { prefixClassname } from "../styles"
 import { isTextElement } from "../utils/validate"
 import PickerContext from "./picker.context"
@@ -54,7 +54,7 @@ export default function PickerOption(props: PickerOptionProps) {
         className,
       )}
       style={{
-        height: `${optionHeight}px`
+        height: `${optionHeight}px`,
       }}
       children={children}
       {...restProps}

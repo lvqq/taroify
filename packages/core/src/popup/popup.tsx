@@ -1,19 +1,20 @@
-import { useUncontrolled } from "@taroify/hooks"
+import { useToRef, useUncontrolled } from "@taroify/hooks"
 import { View } from "@tarojs/components"
-import { ViewProps } from "@tarojs/components/types/View"
+import type { ViewProps } from "@tarojs/components/types/View"
 import classNames from "classnames"
 import * as _ from "lodash"
 import * as React from "react"
 import {
   Children,
-  CSSProperties,
+  type CSSProperties,
   forwardRef,
   isValidElement,
-  ReactElement,
-  ReactNode,
+  type ReactElement,
+  type ReactNode,
   useMemo,
+  useEffect,
 } from "react"
-import { EnterHandler, ExitHandler } from "react-transition-group/Transition"
+import type { EnterHandler, ExitHandler } from "react-transition-group/Transition"
 import Backdrop from "../backdrop"
 import { prefixClassname } from "../styles"
 import Transition, { TransitionName } from "../transition"
@@ -22,7 +23,7 @@ import { useLockScrollTaro } from "../utils/dom/use-lock-scroll-taro"
 import PopupBackdrop from "./popup-backdrop"
 import PopupClose from "./popup-close"
 import PopupContext from "./popup.context"
-import { PopupPlacement } from "./popup.shared"
+import type { PopupPlacement } from "./popup.shared"
 
 function toTransactionName(placement?: PopupPlacement) {
   if (placement === "top") {
@@ -123,8 +124,18 @@ const Popup = forwardRef<any, PopupProps>((props, ref) => {
   } = props
 
   const { value: open } = useUncontrolled({ defaultValue: defaultOpen, value: openProp })
+  const onClosePropRef = useToRef(onClose)
+  const initializedRef = useToRef(open)
+  useLockScrollTaro(!!open && lock)
 
-   useLockScrollTaro(!!open && lock)
+  useEffect(() => {
+    if (initializedRef.current) {
+      if (open === false)
+        onClosePropRef.current?.(false)
+    } else {
+      initializedRef.current = true
+    }
+  }, [open])
 
   const transactionName = transaction ?? toTransactionName(placement)
 
@@ -160,7 +171,8 @@ const Popup = forwardRef<any, PopupProps>((props, ref) => {
             prefixClassname("popup"),
             {
               [prefixClassname("popup--rounded")]: rounded,
-              [prefixClassname("popup--center")]: placement === "center" || _.isUndefined(placement),
+              [prefixClassname("popup--center")]:
+                placement === "center" || _.isUndefined(placement),
               [prefixClassname("popup--top")]: placement === "top",
               [prefixClassname("popup--right")]: placement === "right",
               [prefixClassname("popup--bottom")]: placement === "bottom",

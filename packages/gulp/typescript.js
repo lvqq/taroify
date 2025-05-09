@@ -1,10 +1,12 @@
+// biome-ignore lint/style/useNodejsImportProtocol: <explanation>
 const { Transform } = require("stream")
+// biome-ignore lint/style/useNodejsImportProtocol: <explanation>
 const path = require("path")
 const gulp = require("gulp")
 const fs = require("fs-extra")
 const { series, watch } = require("gulp")
 const ts = require("gulp-typescript")
-
+const { treeShakingLodash } = require("./treeshaking-lodash")
 const ignore = ["node_modules", "**/__tests__", "**/?(*.)+(spec|test).[tj]s?(x)"]
 
 function copyTypescriptFiles(bundle, dist) {
@@ -85,9 +87,8 @@ function addJsExt(bundle, dist) {
   const addJsExtTask = () =>
     gulp
       .src([`./bundles/${dist ?? bundle}/**/*.js`])
-      .pipe(
-        new AddExtTransform(),
-      )
+      .pipe(new AddExtTransform())
+      .pipe(new LodashTransform())
       .pipe(gulp.dest(`./bundles/${dist ?? bundle}`))
   addJsExtTask.displayName = `add js ext to bundles/${dist ?? bundle}`
   return addJsExtTask
@@ -95,63 +96,48 @@ function addJsExt(bundle, dist) {
 
 class AddExtTransform extends Transform {
   constructor() {
-    super({ objectMode: true });
-    this.bundlesPath = path.resolve(process.cwd(), "./bundles");
-  }
-
-  _transformLodash(file, encoding) {
-    const content = file.contents.toString(encoding)
-
-    const lodashImportCode = "import * as _ from \"lodash\";"
-
-    const hasLodashImport = lodashImportCode.includes(lodashImportCode)
-
-    if (!hasLodashImport) return
-
-    const methods = new Set()
-
-    const lodashMethodRegExp = /\s_\.([A-z]+?)\(/g
-
-    let transformed = content
-
-    transformed = transformed.replace(lodashMethodRegExp, (_, method) => {
-      methods.add(method)
-
-      return ` _${method}(`
-    })
-
-    const importCodes = [...methods.values()]
-      .map((method) => `import _${method} from "lodash/${method}";`)
-      .join("\n")
-
-    transformed = transformed.replace(lodashImportCode, importCodes)
-
-    file.contents = Buffer.from(transformed)
+    super({ objectMode: true })
+    this.bundlesPath = path.resolve(process.cwd(), "./bundles")
   }
 
   _transform(file, encoding, callback) {
-    if (file.isBuffer() && file.extname === ".js" ) {
-      const content = file.contents.toString(encoding);
+    if (file.isBuffer() && file.extname === ".js") {
+      const content = file.contents.toString(encoding)
       let newContent = content
-      const importPathRegex = /(?:import|export)[\s|\S]+?"((?:@taroify|\.)\S+)";/g;
+      const importPathRegex = /(?:import|export)[\s|\S]+?"((?:@taroify|\.)\S+)";/g
 
-      let match;
+      let match
+      // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
       while ((match = importPathRegex.exec(content)) !== null) {
         const dirname = match[1].startsWith("@taroify") ? this.bundlesPath : file.dirname
-        const matchPath = match[1].startsWith("@taroify") ? match[1].replace("@taroify", ".") : match[1]
+        const matchPath = match[1].startsWith("@taroify")
+          ? match[1].replace("@taroify", ".")
+          : match[1]
 
-        if (fs.existsSync(path.resolve(dirname, matchPath + ".js"))) {
+        if (fs.existsSync(path.resolve(dirname, `${matchPath}.js`))) {
           newContent = newContent.replace(`"${match[1]}"`, `"${match[1]}.js"`)
-        } else if (fs.existsSync(path.resolve(dirname, matchPath + "/index.js"))) {
+        } else if (fs.existsSync(path.resolve(dirname, `${matchPath}/index.js`))) {
           newContent = newContent.replace(`"${match[1]}"`, `"${match[1]}/index.js"`)
         }
       }
-      file.contents = Buffer.from(newContent);
-
-      this._transformLodash(file, encoding);
+      file.contents = Buffer.from(newContent)
     }
 
-    callback(null, file);
+    callback(null, file)
+  }
+}
+
+class LodashTransform extends Transform {
+  constructor() {
+    super({ objectMode: true })
+  }
+
+  _transform(file, encoding, callback) {
+    if (file.isBuffer() && file.extname === ".js") {
+      const content = file.contents.toString(encoding)
+      file.contents = Buffer.from(treeShakingLodash(content))
+      callback(null, file)
+    }
   }
 }
 

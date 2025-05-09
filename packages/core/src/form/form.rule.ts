@@ -1,7 +1,7 @@
 import * as _ from "lodash"
-import { ReactNode } from "react"
+import type { ReactNode } from "react"
 import { isPromise } from "../utils/promisify"
-import { FormRule } from "./form.shared"
+import type { FormRule } from "./form.shared"
 
 function isEmptyValue(value: any) {
   if (Array.isArray(value)) {
@@ -58,23 +58,28 @@ function validateRule(value: any, rule: FormRule): Promise<ReactNode> {
   return getSyncRule(value, rule) ?? getValidatorRule(value, rule)
 }
 
-export function validateRules(value: any, rules: FormRule[],validateFirst:boolean): Promise<ReactNode[]> {
+export function validateRules(
+  value: any,
+  rules: FormRule[],
+  validateFirst: boolean,
+): Promise<ReactNode[]> {
   return rules.reduce(
     (promise, rule) =>
       promise.then((errors) => {
+        // if set validateFirst true，return first error
+        if (validateFirst && errors.length > 0) {
+          return errors
+        }
+        let formattedValue = value
         if (rule.formatter) {
-          value = rule.formatter(value, rule)
+          formattedValue = rule.formatter(value, rule)
         }
 
-        return validateRule(value, rule).then((error) => {
+        return validateRule(formattedValue, rule).then((error) => {
           // Push string only,
           // Because error could be true or undefined
           if (_.isString(error)) {
             errors.push(error)
-            // if set validateFirst true，return first error 
-            if (validateFirst) {
-              return errors;
-            }
           }
           return errors
         })

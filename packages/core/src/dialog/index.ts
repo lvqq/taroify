@@ -1,4 +1,4 @@
-import DialogComponent, { DialogProps } from "./dialog"
+import DialogComponent, { type DialogProps } from "./dialog"
 import DialogActions from "./dialog-actions"
 import DialogContent from "./dialog-content"
 import DialogHeader from "./dialog-header"
@@ -11,7 +11,7 @@ import {
   setDefaultDialogOptions,
 } from "./dialog.imperative"
 
-export type { DialogThemeVars } from './dialog.shared'
+export type { DialogThemeVars } from "./dialog.shared"
 
 interface DialogInterface {
   (props: DialogProps): JSX.Element

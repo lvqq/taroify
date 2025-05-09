@@ -1,10 +1,10 @@
 import * as React from "react"
-import { ReactNode } from "react"
+import type { ReactNode } from "react"
 import CellBase from "./cell-base"
 import CellBrief from "./cell-brief"
 import CellTitle from "./cell-title"
 import CellValue from "./cell-value"
-import { CellBaseProps } from "./cell.shared"
+import type { CellBaseProps } from "./cell.shared"
 
 export interface CellProps extends CellBaseProps {
   title?: ReactNode
@@ -12,13 +12,14 @@ export interface CellProps extends CellBaseProps {
 }
 
 function Cell(props: CellProps) {
-  const { title, brief, children, ...restProps } = props
+  const { title, brief, children, titleStyle, titleClass, valueClass, briefClass, ...restProps } =
+    props
   return (
     <CellBase {...restProps}>
       {title && (
-        <CellTitle>
+        <CellTitle titleStyle={titleStyle} titleClass={titleClass}>
           {title}
-          {brief && <CellBrief children={brief} />}
+          {brief && <CellBrief children={brief} briefClass={briefClass} />}
         </CellTitle>
       )}
       <CellValue alone={!title} children={children} />
